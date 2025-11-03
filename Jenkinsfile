@@ -1,10 +1,10 @@
 node {
   // ---------- Settings ----------
-  def DOCKERHUB_REPO = "dalairr/nodejs-chat-app"   // your Docker Hub repo
+  def DOCKERHUB_REPO = "dalairf/nodejs-chat-app"    // unified name
   def IMAGE_TAG      = "build-${env.BUILD_NUMBER}"
-  def APP_PORT       = "3000"
-  def APP_HOST       = "173.230.133.23"            // Linode IP
-  def APP_USER       = "root"                      // Linode default SSH user
+  def APP_PORT       = "3700"                        // app listens on 3700
+  def APP_HOST       = "173.230.133.23"             // Linode IP
+  def APP_USER       = "root"                       // SSH user
 
   stage('Checkout (Clone GitHub)') {
     checkout scm
@@ -39,11 +39,19 @@ node {
             echo "${DHP}" | docker login -u "${DHU}" --password-stdin &&
             docker pull ${DOCKERHUB_REPO}:latest &&
             docker rm -f chatapp || true &&
-            docker run -d --name chatapp -p ${APP_PORT}:${APP_PORT} -e PORT=${APP_PORT} ${DOCKERHUB_REPO}:latest &&
+            docker run -d --name chatapp \\
+              -p ${APP_PORT}:${APP_PORT} \\
+              -e NODE_ENV=production \\
+              -e PORT=${APP_PORT} \\
+              ${DOCKERHUB_REPO}:latest &&
             docker logout || true
           '
         """
       }
     }
+  }
+
+  stage('Verify (remote)') {
+    sh "curl -sSf http://${APP_HOST}:${APP_PORT}/ | head -c 200 || true"
   }
 }

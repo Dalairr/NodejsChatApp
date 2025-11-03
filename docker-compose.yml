@@ -1,13 +1,10 @@
-version: "3.9"
+# docker-compose.yml
 services:
   chatapp:
-    image: <your-dockerhub-username>/nodejs-chat-app:${TAG:-latest}
-    build:
-      context: .
-      dockerfile: Dockerfile
+    build: .
+    image: dalairf/nodejs-chat-app:latest   # keep this consistent with Jenkinsfile
     ports:
-      - "3000:3000"
+      - "3700:3700"
     environment:
       - NODE_ENV=production
-      - PORT=3000
-    restart: unless-stopped
+      - PORT=3700
