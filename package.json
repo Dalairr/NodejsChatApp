@@ -1,27 +1,32 @@
 {
   "name": "realtimechat",
   "version": "1.0.0",
-  "description": "Real Time Chat With NodeJS, Socket.io and ExpressJS",
+  "description": "Real Time Chat with NodeJS, Socket.io, and ExpressJS",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/amalan01/NodejsChatApp.git"
+    "url": "git+https://github.com/Dalairr/NodejsChatApp.git"
   },
   "keywords": [
     "nodejs",
     "socket.io",
     "expressJS",
-    "extwiii",
     "chat",
     "app"
   ],
- 
   "dependencies": {
     "express": "^4.14.0",
     "jade": "^1.11.0",
     "socket.io": "^1.5.0"
-  }
+  },
+  "author": "Dalair Franzen",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Dalairr/NodejsChatApp/issues"
+  },
+  "homepage": "https://github.com/Dalairr/NodejsChatApp#readme"
 }
