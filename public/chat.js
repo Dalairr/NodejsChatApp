@@ -1,6 +1,6 @@
 window.onload = function () {
   var messages = [];
-  var socket = io(); // <-- remove localhost and port
+  var socket = io(); // <-- auto-connect to same host/port
 
   var field = document.getElementById("field");
   var sendButton = document.getElementById("send");

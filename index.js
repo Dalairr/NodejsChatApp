@@ -1,28 +1,29 @@
-var express = require("express");
-var app = express();
-var port = process.env.PORT || 3700;
+const path = require('path');
+const express = require('express');
+const http = require('http');
 
-// Views (Jade)
-app.set('views', __dirname + '/views');
-app.set('view engine', "jade");
-app.engine('jade', require('jade').__express);
+const app = express();
+const port = process.env.PORT || 3700;
 
-// Health + simple root (keeps Jenkins happy)
-app.get("/health", (_req, res) => res.type('text/plain').send('ok'));
-app.get("/", (_req, res) => res.type('text/plain').send('Node Chat App is alive 🚀'));
+// Views (Jade/Pug) + static files
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'jade');
+app.use(express.static(path.join(__dirname, 'public')));
 
-// Static
-app.use(express.static(__dirname + '/public'));
+// Health endpoint for Jenkins
+app.get('/health', (_req, res) => res.type('text/plain').send('ok'));
 
-// Start HTTP server and attach socket.io
-var server = app.listen(port, function () {
-  console.log('Node.js listening on port ' + port);
+// Main page (renders chat UI)
+app.get('/', (_req, res) => res.render('page'));
+
+const server = http.createServer(app);
+const io = require('socket.io')(server);
+
+io.on('connection', (socket) => {
+  socket.emit('message', { username: 'Server', message: 'Welcome to the Real Time Web Chat' });
+  socket.on('send', (data) => io.emit('message', data));
 });
 
-var io = require('socket.io').listen(server);
-io.sockets.on('connection', function (socket) {
-  socket.emit('message', { message: 'Welcome to the Real Time Web Chat' });
-  socket.on('send', function (data) {
-    io.sockets.emit('message', data);
-  });
+server.listen(port, () => {
+  console.log(`Node.js listening on port ${port}`);
 });
