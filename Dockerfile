@@ -1,13 +1,11 @@
-# Dockerfile
 FROM node:18-alpine
 
 WORKDIR /usr/src/app
 
 COPY package*.json ./
-RUN npm ci --omit=dev
+RUN npm install --omit=dev
 
 COPY . .
 
-EXPOSE 3700
-ENV NODE_ENV=production
-CMD ["node","index.js"]
+EXPOSE 3000
+CMD ["npm", "start"]
